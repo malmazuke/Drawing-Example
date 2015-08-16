@@ -12,6 +12,14 @@ class ViewController: UIViewController {
 
   @IBOutlet weak var mainImageView: UIImageView!
   @IBOutlet weak var tempImageView: UIImageView!
+  
+  var lastPoint = CGPoint.zeroPoint
+  var red: CGFloat = 0.0
+  var green: CGFloat = 0.0
+  var blue: CGFloat = 0.0
+  var brushWidth: CGFloat = 10.0
+  var opacity: CGFloat = 1.0
+  var swiped = false
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -21,6 +29,57 @@ class ViewController: UIViewController {
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
     // Dispose of any resources that can be recreated.
+  }
+  
+  override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    swiped = false
+    if let touch = touches.first as? UITouch {
+      lastPoint = touch.locationInView(self.view)
+    }
+  }
+  
+  func drawLineFrom(fromPoint: CGPoint, toPoint: CGPoint) {
+    UIGraphicsBeginImageContext(view.frame.size)
+    let context = UIGraphicsGetCurrentContext()
+    tempImageView.image?.drawInRect(CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height))
+    
+    CGContextMoveToPoint(context, fromPoint.x, fromPoint.y)
+    CGContextAddLineToPoint(context, toPoint.x, toPoint.y)
+    
+    CGContextSetLineCap(context, kCGLineCapRound)
+    CGContextSetLineWidth(context, brushWidth)
+    CGContextSetRGBStrokeColor(context, red, green, blue, 1.0)
+    CGContextSetBlendMode(context, kCGBlendModeNormal)
+    
+    CGContextStrokePath(context)
+    
+    tempImageView.image = UIGraphicsGetImageFromCurrentImageContext()
+    tempImageView.alpha = opacity
+    UIGraphicsEndImageContext()
+  }
+  
+  override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
+    swiped = true
+    if let touch = touches.first as? UITouch {
+      let currentPoint = touch.locationInView(view)
+      drawLineFrom(lastPoint, toPoint: currentPoint)
+      
+      lastPoint = currentPoint
+    }
+  }
+  
+  override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+    if !swiped {
+      drawLineFrom(lastPoint, toPoint: lastPoint)
+    }
+    
+    UIGraphicsBeginImageContext(mainImageView.frame.size)
+    mainImageView.image?.drawInRect(CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height), blendMode: kCGBlendModeNormal, alpha: 1.0)
+    tempImageView.image?.drawInRect(CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height), blendMode: kCGBlendModeNormal, alpha: opacity)
+    mainImageView.image = UIGraphicsGetImageFromCurrentImageContext()
+    UIGraphicsEndImageContext()
+    
+    tempImageView.image = nil
   }
 
   // MARK: - Actions
