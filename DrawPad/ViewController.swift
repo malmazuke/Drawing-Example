@@ -20,6 +20,20 @@ class ViewController: UIViewController {
   var brushWidth: CGFloat = 10.0
   var opacity: CGFloat = 1.0
   var swiped = false
+  
+  let colors: [(CGFloat, CGFloat, CGFloat)] = [
+    (0, 0, 0),
+    (105.0 / 255.0, 105.0 / 255.0, 105.0 / 255.0),
+    (1.0, 0, 0),
+    (0, 0, 1.0),
+    (51.0 / 255.0, 204.0 / 255.0, 1.0),
+    (102.0 / 255.0, 204.0 / 255.0, 0),
+    (102.0 / 255.0, 1.0, 0),
+    (160.0 / 255.0, 82.0 / 255.0, 45.0 / 255.0),
+    (1.0, 102.0 / 255.0, 0),
+    (1.0, 1.0, 0),
+    (1.0, 1.0, 1.0),
+  ]
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -91,6 +105,16 @@ class ViewController: UIViewController {
   }
   
   @IBAction func pencilPressed(sender: AnyObject) {
+    var index = sender.tag ?? 0
+    if index < 0 || index >= colors.count {
+      index = 0
+    }
+    
+    (red, green, blue) = colors[index]
+    
+    if index == colors.count - 1 {
+      opacity = 1.0
+    }
   }
 }
 
