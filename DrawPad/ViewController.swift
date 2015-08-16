@@ -103,6 +103,13 @@ class ViewController: UIViewController {
   }
 
   @IBAction func share(sender: AnyObject) {
+    UIGraphicsBeginImageContext(mainImageView.bounds.size)
+    mainImageView.image?.drawInRect(CGRect(x: 0, y: 0, width: mainImageView.frame.size.width, height: mainImageView.frame.size.height))
+    let image = UIGraphicsGetImageFromCurrentImageContext()
+    UIGraphicsEndImageContext()
+    
+    let activity = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+    presentViewController(activity, animated: true, completion: nil)
   }
   
   @IBAction func pencilPressed(sender: AnyObject) {
