@@ -1,5 +1,9 @@
 import UIKit
 
+protocol SettingsViewControllerDelegate: class {
+  func settingsViewControllerFinished(settingsViewController: SettingsViewController)
+}
+
 class SettingsViewController: UIViewController {
 
   @IBOutlet weak var sliderBrush: UISlider!
@@ -19,6 +23,8 @@ class SettingsViewController: UIViewController {
   @IBOutlet weak var labelGreen: UILabel!
   @IBOutlet weak var labelBlue: UILabel!
   
+  weak var delegate: SettingsViewControllerDelegate?
+  
   var brush: CGFloat = 10.0
   var opacity: CGFloat = 1.0
   
@@ -35,6 +41,7 @@ class SettingsViewController: UIViewController {
 
   @IBAction func close(sender: AnyObject) {
     dismissViewControllerAnimated(true, completion: nil)
+    self.delegate?.settingsViewControllerFinished(self)
   }
 
   @IBAction func colorChanged(sender: UISlider) {
