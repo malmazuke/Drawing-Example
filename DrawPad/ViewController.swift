@@ -99,6 +99,7 @@ class ViewController: UIViewController {
   // MARK: - Actions
 
   @IBAction func reset(sender: AnyObject) {
+    mainImageView.image = nil
   }
 
   @IBAction func share(sender: AnyObject) {
