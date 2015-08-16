@@ -123,6 +123,9 @@ class ViewController: UIViewController {
     settingsViewController.delegate = self
     settingsViewController.brush = brushWidth
     settingsViewController.opacity = opacity
+    settingsViewController.red = red
+    settingsViewController.blue = blue
+    settingsViewController.green = green
   }
 }
 
@@ -130,5 +133,8 @@ extension ViewController: SettingsViewControllerDelegate {
   func settingsViewControllerFinished(settingsViewController: SettingsViewController) {
     self.brushWidth = settingsViewController.brush
     self.opacity = settingsViewController.opacity
+    self.red = settingsViewController.red
+    self.blue = settingsViewController.blue
+    self.green = settingsViewController.green
   }
 }

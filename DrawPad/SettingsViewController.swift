@@ -28,10 +28,25 @@ class SettingsViewController: UIViewController {
   var brush: CGFloat = 10.0
   var opacity: CGFloat = 1.0
   
+  var red: CGFloat = 0.0
+  var blue: CGFloat = 0.0
+  var green: CGFloat = 0.0
+  
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    // Do any additional setup after loading the view.
+    sliderBrush.value = Float(brush)
+    labelBrush.text = NSString(format: "%.1f", brush.native) as String
+    sliderOpacity.value = Float(opacity)
+    labelOpacity.text = NSString(format: "%.1f", opacity.native) as String
+    sliderRed.value = Float(red * 255.0)
+    labelRed.text = NSString(format: "%d", Int(sliderRed.value)) as String
+    sliderBlue.value = Float(blue * 255.0)
+    labelBlue.text = NSString(format: "%d", Int(sliderBlue.value)) as String
+    sliderGreen.value = Float(green * 255.0)
+    labelGreen.text = NSString(format: "%d", Int(sliderGreen.value)) as String
+    
+    drawPreview()
   }
 
   override func didReceiveMemoryWarning() {
@@ -45,6 +60,14 @@ class SettingsViewController: UIViewController {
   }
 
   @IBAction func colorChanged(sender: UISlider) {
+    red = CGFloat(sliderRed.value / 255.0)
+    labelRed.text = NSString(format: "%d", Int(sliderRed.value)) as String
+    blue = CGFloat(sliderBlue.value / 255.0)
+    labelBlue.text = NSString(format: "%d", Int(sliderBlue.value)) as String
+    green = CGFloat(sliderGreen.value / 255.0)
+    labelGreen.text = NSString(format: "%d", Int(sliderGreen.value)) as String
+    
+    drawPreview()
   }
 
   @IBAction func sliderChanged(sender: UISlider) {
@@ -66,7 +89,7 @@ class SettingsViewController: UIViewController {
     CGContextSetLineCap(context, kCGLineCapRound)
     CGContextSetLineWidth(context, brush)
     
-    CGContextSetRGBStrokeColor(context, 0.0, 0.0, 0.0, 1.0)
+    CGContextSetRGBStrokeColor(context, red, green, blue, 1.0)
     CGContextMoveToPoint(context, 45.0, 45.0)
     CGContextAddLineToPoint(context, 45.0, 45.0)
     CGContextStrokePath(context)
@@ -81,7 +104,7 @@ class SettingsViewController: UIViewController {
     CGContextMoveToPoint(context, 45.0, 45.0)
     CGContextAddLineToPoint(context, 45.0, 45.0)
     
-    CGContextSetRGBStrokeColor(context, 0.0, 0.0, 0.0, opacity)
+    CGContextSetRGBStrokeColor(context, red, green, blue, opacity)
     CGContextStrokePath(context)
     imageViewOpacity.image = UIGraphicsGetImageFromCurrentImageContext()
     
